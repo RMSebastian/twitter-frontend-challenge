@@ -1,4 +1,5 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
+import { InternalAxiosRequestConfig } from "axios";
+import { myAxios } from "../service/HttpRequestService";
 
 export const AxiosInterceptor = () => {
   const UpdateToken = (request: InternalAxiosRequestConfig<any>) => {
@@ -9,16 +10,16 @@ export const AxiosInterceptor = () => {
     return request;
   };
 
-  axios.interceptors.request.use((request) => {
+  myAxios.interceptors.request.use((request) => {
     return UpdateToken(request);
   });
 
-  axios.interceptors.response.use(
+  myAxios.interceptors.response.use(
     (response) => {
       return response;
     },
     (error) => {
-      if (error.response.status >= 400) {
+      if (error.response.status == 401) {
         localStorage.removeItem("token");
         console.error(error);
       }
