@@ -1,5 +1,5 @@
 import { InternalAxiosRequestConfig } from "axios";
-import { myAxios } from "../service/HttpRequestService";
+import { myAxios } from "./axios.myAxios";
 
 export const AxiosInterceptor = () => {
   const UpdateToken = (request: InternalAxiosRequestConfig<any>) => {

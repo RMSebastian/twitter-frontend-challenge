@@ -1,6 +1,6 @@
-import axios from "axios";
+import { myAxios } from "../axios/axios.myAxios";
 
-export const myAxios = axios.create({baseURL: process.env.REACT_APP_API_DEV_URL})
+
 
 //T should be InputDatas
 export const postData = async <T, T2>(
