@@ -6,7 +6,6 @@ import { StyledModalContainer } from "./ModalContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledH5, StyledP } from "../common/text";
 import ReactDom from "react-dom";
-import { useClickAway } from "@uidotdev/usehooks";
 interface ModalProps {
   show: boolean;
   title: string;

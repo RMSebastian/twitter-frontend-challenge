@@ -8,8 +8,6 @@ import {
   deleteCommentById_param_endpoint,
   getCommentById_param_endpoint,
   getCommentsByPostId_param_endpoint,
-  getCommentsFromUser_param_endpoint,
-  commentMe_endpoint,
   postComment_param_endpoint,
 } from "../../endpoints";
 import { PostData, PostDTO } from "../../service";

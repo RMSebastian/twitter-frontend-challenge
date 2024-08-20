@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { StyledContentContainer } from "../home-page/components/contentContainer/StyledContentContainer";
 import { useToken } from "../../hooks/useToken";
 import { AuthorDTO, ChatDTO, MessageDTO } from "../../service";
 import FriendBox from "../../components/chat/FriendBox";
 import { StyledContainer } from "../../components/common/Container";
 import { StyledHeaderContainer } from "../home-page/components/header/HeaderContainer";
-import { StyledUserSuggestionContainer } from "../home-page/UserSeuggestionContainer";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import Chat from "../../components/chat/Chat";
 import { useDispatch } from "react-redux";
 import { updateUserId } from "../../redux/chat";
-import { StyledH3, StyledH5 } from "../../components/common/text";
+
 
 // Define la URL del servidor aquí
 const URL: string =
