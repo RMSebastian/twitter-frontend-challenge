@@ -57,7 +57,7 @@ const SignUpPage = () => {
     };
     console.log(dto);
     try {
-      signUp(dto);
+      await signUp(dto);
       actions.setSubmitting(false);
     } catch (error) {
       actions.setSubmitting(false);
