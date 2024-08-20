@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import { StyledBlurredBackground } from "../common/BlurredBackground";
 import { ModalCloseButton } from "../common/ModalCloseButton";
 import { StyledTweetModalContainer } from "../tweet-modal/TweetModalContainer";
-import ReactDom from "react-dom";
 interface PostModalProps {
   onClose: () => void;
   show: boolean;

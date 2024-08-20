@@ -10,7 +10,6 @@ import { store } from "../../redux/store";
 import { LightTheme } from "../../util/LightTheme";
 import { ROUTER } from "./Router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastProvider } from "../toast/ToastProvider";
 
 i18next.use(initReactI18next).init({
@@ -31,7 +30,6 @@ export const queryClient = new QueryClient();
 export const Layout = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <I18nextProvider i18n={i18next}>
         <Provider store={store}>
           <ThemeProvider theme={LightTheme}>

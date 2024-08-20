@@ -3,7 +3,7 @@ import {
   StyledLogoutPrompt,
   StyledProfileLogoutPromptContainer,
 } from "./StyledProfileLogoutPromptContainer";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import icon from "../../assets/icon.png";
 import { StyledP } from "../common/text";
 import { StyledContainer } from "../common/Container";

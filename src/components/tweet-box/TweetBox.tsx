@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Button from "../button/Button";
 import TweetInput from "../tweet-input/TweetInput";
 import ImageContainer from "../tweet/tweet-image/ImageContainer";
@@ -30,7 +30,9 @@ const TweetBox = ({ parentId, close, borderless, mobile }: TweetBoxProps) => {
   const { mutate: createPost, isPending } = usePostPost();
   const { mutate: createComment } = usePostComment();
   const { data: user } = useGetMyUser();
-
+useEffect(()=>{
+  setOnMobile(window.innerWidth > 600);
+})
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
