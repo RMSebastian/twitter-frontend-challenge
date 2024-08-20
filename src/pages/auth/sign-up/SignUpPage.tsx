@@ -46,14 +46,14 @@ const SignUpPage = () => {
   const { t } = useTranslation();
 
   const handleSubmit = async (
-    value: SignUpData,
-    actions: FormikHelpers<SignUpData>
+    value: {Username: string, Name: string, Email: string, Password:string, ConfirmPassword: string},
+    actions: FormikHelpers<{Username: string, Name: string, Email: string, Password:string, ConfirmPassword: string}>
   ) => {
     const dto: Partial<SignUpData> = {
-      username: value.username,
-      name: value.name,
-      email: value.email,
-      password: value.password,
+      username: value.Username,
+      name: value.Name,
+      email: value.Email,
+      password: value.Password,
     };
     console.log(dto);
     try {
@@ -75,41 +75,43 @@ const SignUpPage = () => {
           </div>
           <Formik
             initialValues={{
-              name: "",
-              username: "",
-              email: "",
-              password: "",
-              confirmPassword: "",
+              Name: "",
+              Username: "",
+              Email: "",
+              Password: "",
+              ConfirmPassword: "",
             }}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={(value, actions) => {
+              handleSubmit(value, actions);
+            }}
           >
             {({ isSubmitting }: any) => (
               <Form>
                 <div className={"input-container"}>
                   <LabeledInput
-                    name="name"
+                    name="Name"
                     required
                     placeholder={"Enter name..."}
                     title={t("input-params.name")}
                     error={error}
                   />
                   <LabeledInput
-                    name="username"
+                    name="Username"
                     required
                     placeholder={"Enter username..."}
                     title={t("input-params.username")}
                     error={error}
                   />
                   <LabeledInput
-                    name="email"
+                    name="Email"
                     required
                     placeholder={"Enter email..."}
                     title={t("input-params.email")}
                     error={error}
                   />
                   <LabeledInput
-                    name="password"
+                    name="Password"
                     type="password"
                     required
                     placeholder={"Enter password..."}
@@ -117,7 +119,7 @@ const SignUpPage = () => {
                     error={error}
                   />
                   <LabeledInput
-                    name="confirmPassword"
+                    name="ConfirmPassword"
                     type="password"
                     required
                     placeholder={"Confirm password..."}
