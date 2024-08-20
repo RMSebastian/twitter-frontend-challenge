@@ -24,7 +24,7 @@ const SignInPage = () => {
   const { mutate: signIn, isError: signInError } = useLogin();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const handleSubmit = (
+  const handleSubmit = async (
     value: { Email: string; Password: string },
     actions: FormikHelpers<{
       Email: string;
@@ -32,7 +32,7 @@ const SignInPage = () => {
     }>
   ) => {
     try {
-      signIn({ email: value.Email, password: value.Password });
+      await signIn({ email: value.Email, password: value.Password });
       actions.setSubmitting(false);
     } catch (error) {
       actions.setSubmitting(false);

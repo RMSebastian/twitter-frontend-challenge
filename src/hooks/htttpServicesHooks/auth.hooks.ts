@@ -15,8 +15,9 @@ export const useSignup = () => {
   const { addToast } = useToast();
   return useMutation<TokenProps, Error, Partial<SingUpData>>({
     mutationKey: ["useSignup"],
-    mutationFn: (data: Partial<SingUpData>): Promise<TokenProps> =>
-      postData<Partial<SingUpData>, TokenProps>(signup_endpoint, data),
+    mutationFn: async (data: Partial<SingUpData>): Promise<TokenProps> =>{
+      return await postData<Partial<SingUpData>, TokenProps>(signup_endpoint, data)
+    },
     onSuccess: (response) => {
       localStorage.setItem("token", `Bearer ${response.token}`);
       addToast({
@@ -36,8 +37,9 @@ export const useLogin = () => {
   const { addToast } = useToast();
   return useMutation<TokenProps, Error, SingInData>({
     mutationKey: ["useLogin"],
-    mutationFn: (data: SingInData): Promise<TokenProps> =>
-      postData<SingInData, TokenProps>(login_endpoint, data),
+    mutationFn: async (data: SingInData): Promise<TokenProps> =>{
+      return await postData<SingInData, TokenProps>(login_endpoint, data)
+    },
     onSuccess: (response) => {
       addToast({
         message: "Account entered successfully",
