@@ -27,12 +27,12 @@ export const DeletePostModal = ({
   const { t } = useTranslation();
   const { mutate: deletePost } = useDeletePostById();
   const { mutate: deleteComment } = useDeleteCommentById();
-  const handleDelete = () => {
+  const handleDelete =async () => {
     try {
       if (parentId !== undefined && parentId !== null) {
-        deleteComment({ id, parentId });
+        await deleteComment({ id, parentId });
       } else {
-        deletePost(id);
+        await deletePost(id);
       }
       handleClose();
     } catch (error) {

@@ -51,7 +51,7 @@ const ProfilePage = () => {
     else return { component: ButtonType.FOLLOW, text: t("buttons.follow") };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (profile?.id === user?.id) {
       deleteUser().then(() => {
         localStorage.removeItem("token");
@@ -62,7 +62,7 @@ const ProfilePage = () => {
         });
       });
     } else {
-      unfollowUser(profile!.id);
+      await unfollowUser(profile!.id);
       setFollowing(false);
       setShowModal(false);
     }
