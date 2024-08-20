@@ -14,7 +14,9 @@ import { AuthorDTO, UserDTO } from "../../service";
 export const useGetMyUser = () => {
   return useQuery<UserDTO>({
     queryKey: [`GetMyUser`],
-    queryFn: () => fetchData(userMe_endpoint),
+    queryFn:async () => {
+      return await fetchData(userMe_endpoint)
+    },
     staleTime: Infinity,
   });
 };
@@ -24,11 +26,12 @@ export const useGetRecommendedUsers = (
 ) => {
   return useQuery<AuthorDTO[]>({
     queryKey: [`GetRecommendedUsers`],
-    queryFn: () =>
-      fetchData<OffsetPagination>(recommendedUsers_endpoint, {
+    queryFn: async () =>{
+      return await fetchData<OffsetPagination>(recommendedUsers_endpoint, {
         limit: limit,
         skip: skip,
-      }),
+      })
+    },
     staleTime: 50000,
   });
 };
@@ -39,18 +42,22 @@ export const useGetSearchUsers = (
 ) => {
   return useQuery<AuthorDTO[]>({
     queryKey: [`GetSearchUsers`, username],
-    queryFn: () =>
-      fetchData<OffsetPagination>(searchedUsers_param_endpoint(username), {
+    queryFn: async () =>{
+      return await fetchData<OffsetPagination>(searchedUsers_param_endpoint(username), {
         limit: limit,
         skip: skip,
-      }),
+      })
+    }
+      ,
     enabled: username.trim() !== "",
   });
 };
 export const useGetUserById = (id: string) => {
   return useQuery<UserDTO>({
     queryKey: [`GetUserById`, id],
-    queryFn: () => fetchData(getUser_param_endpoint(id)),
+    queryFn: async () => {
+      return await fetchData(getUser_param_endpoint(id))
+    },
     staleTime: Infinity,
   });
 };
@@ -58,7 +65,7 @@ export const useGetUserById = (id: string) => {
 //Use Mutators
 export const useDeleteUser = () => {
   const deleteUser = async () => {
-    deleteData(delete_endpoint);
+    return await deleteData(delete_endpoint);
   };
 
   return {

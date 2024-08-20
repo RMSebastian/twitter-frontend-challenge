@@ -17,14 +17,14 @@ export const usePostReaction = (isPost: boolean, parentId: string | null) => {
   const { addToast } = useToast();
   return useMutation<ReactionDTO, Error, usePostReactionProps>({
     mutationKey: ["usePostReaction"],
-    mutationFn: ({
+    mutationFn: async ({
       postId,
       data,
     }: usePostReactionProps): Promise<ReactionDTO> =>
-      postData<ReactionData, ReactionDTO>(
+      {return await postData<ReactionData, ReactionDTO>(
         createReaction_param_endpoint(postId),
         data
-      ),
+      )},
     onSuccess: (data, variables) => {
       if (isPost) {
         updateCommentInfiniteQuery(
@@ -73,8 +73,10 @@ export const useDeleteReaction = (
   const { addToast } = useToast();
   return useMutation<ReactionDTO, Error, string>({
     mutationKey: ["useDeleteReaction"],
-    mutationFn: (reactionId: string): Promise<ReactionDTO> =>
-      deleteData(deleteReaction_param_endpoint(reactionId)),
+    mutationFn: async (reactionId: string): Promise<ReactionDTO> =>{
+      return await deleteData(deleteReaction_param_endpoint(reactionId))
+    }
+      ,
     onSuccess: (data, reactionId) => {
       if (isPost) {
         updateCommentInfiniteQuery(

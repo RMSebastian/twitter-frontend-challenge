@@ -26,7 +26,9 @@ import { CursorPagination } from "../../util/Pagination";
 export const useGetCommentById = (commentId: string) => {
   return useQuery<PostDTO>({
     queryKey: [`getCommentsById`, commentId],
-    queryFn: () => fetchData(getCommentById_param_endpoint(commentId)),
+    queryFn: async () => {
+      return await fetchData(getCommentById_param_endpoint(commentId))
+    },
     staleTime: 50000,
   });
 };
@@ -68,14 +70,14 @@ export const usePostComment = () => {
   const { addToast } = useToast();
   return useMutation<PostDTO, Error, PostData>({
     mutationKey: ["PostComment"],
-    mutationFn: (data: PostData): Promise<PostDTO> => {
+    mutationFn: async (data: PostData): Promise<PostDTO> => {
       const dto: usePostCommentProps = {
         content: data.content,
         images: data.images?.map((image) => image.name),
         parentId: data.parentId,
       };
 
-      return postData<usePostCommentProps, PostDTO>(
+      return await postData<usePostCommentProps, PostDTO>(
         postComment_param_endpoint(data.parentId!),
         dto
       );
@@ -128,8 +130,9 @@ export const useDeleteCommentById = () => {
   const { addToast } = useToast();
   return useMutation<void, Error, DeletePostProps>({
     mutationKey: ["DeletePostById"],
-    mutationFn: (props: DeletePostProps): Promise<void> =>
-      deleteData(deleteCommentById_param_endpoint(props.id)),
+    mutationFn: async (props: DeletePostProps): Promise<void> =>{
+      return await deleteData(deleteCommentById_param_endpoint(props.id))
+    },
     onSuccess: (data, props) => {
       updateCommentInfiniteQueryNumber(["getAllPosts"], props.parentId!, false);
       updateCommentInfiniteQueryNumber(

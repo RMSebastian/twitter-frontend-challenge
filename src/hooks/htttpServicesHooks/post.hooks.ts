@@ -78,7 +78,9 @@ export const useGetFollowPosts = () => {
 export const useGetPostById = (postId: string) => {
   return useQuery<PostDTO>({
     queryKey: [`getPostById`, postId],
-    queryFn: () => fetchData(getPostById_param_endpoint(postId)),
+    queryFn: async () => {
+      return await fetchData(getPostById_param_endpoint(postId))
+    },
     staleTime: 50000,
     enabled: postId !== null,
   });
@@ -120,14 +122,14 @@ export const usePostPost = () => {
   const { addToast } = useToast();
   return useMutation<PostDTO, Error, PostData>({
     mutationKey: ["usePostPost"],
-    mutationFn: (data: PostData): Promise<PostDTO> => {
+    mutationFn:async (data: PostData): Promise<PostDTO> => {
       const dto: usePostPostProps = {
         content: data.content,
         images: data.images?.map((image) => image.name),
         parentId: data.parentId,
       };
 
-      return postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
+      return await postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
     },
     onSuccess: async (data, variables) => {
       const { upload } = S3Service;
@@ -165,8 +167,9 @@ export const useDeletePostById = () => {
   const { addToast } = useToast();
   return useMutation<void, Error, string>({
     mutationKey: ["useDeletePostById"],
-    mutationFn: (postId: string): Promise<void> =>
-      deleteData(deletePostById_param_endpoint(postId)),
+    mutationFn:async (postId: string): Promise<void> =>{
+      return await deleteData(deletePostById_param_endpoint(postId))
+    },
     onSuccess: (data, postId) => {
       queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
         ["getAllPosts"],

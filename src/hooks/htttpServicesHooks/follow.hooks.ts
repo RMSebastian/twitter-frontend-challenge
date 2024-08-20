@@ -14,8 +14,10 @@ export const useFollowUser = () => {
   const { addToast } = useToast();
   return useMutation<Object, Error, string>({
     mutationKey: ["useFollowUser"],
-    mutationFn: (userId: string): Promise<Object> =>
-      postData<string, Object>(followUser_param_endpoint(userId)),
+    mutationFn: async (userId: string): Promise<Object> =>
+      {
+        return await postData<string, Object>(followUser_param_endpoint(userId))
+      },
     onSuccess: (data, userId) => {
       addToast({
         message: "Follow created Successfully",
@@ -47,7 +49,9 @@ export const useUnfollowUser = () => {
   return useMutation<Object, Error, string>({
     mutationKey: ["useUnfollowUser"],
     mutationFn: async (userId: string): Promise<Object> =>
-      postData<string, Object>(unfollowUser_param_endpoint(userId)),
+      {
+        return await postData<string, Object>(unfollowUser_param_endpoint(userId))
+      },
     onSuccess: (data, userId) => {
       addToast({
         message: "Unfollow created Successfully",
