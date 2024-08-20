@@ -5,7 +5,7 @@ export const StyledContentContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  flex: 2;
+  flex: 2.5;
   height: 100%;
   border-right: 1px solid ${(props) => props.theme.colors.containerLine};
 

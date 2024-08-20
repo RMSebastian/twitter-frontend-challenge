@@ -2,9 +2,11 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import { StyledInputContainer } from "./InputContainer";
 import { StyledInputTitle } from "./InputTitle";
 import { StyledInputElement } from "./StyledInputElement";
+import { ErrorMessage, Field } from "formik";
 
 interface InputWithLabelProps {
   type?: "password" | "text";
+  name: string;
   title: string;
   placeholder: string;
   required: boolean;
@@ -13,6 +15,7 @@ interface InputWithLabelProps {
 }
 
 const LabeledInput = ({
+  name,
   title,
   placeholder,
   required,
@@ -38,26 +41,35 @@ const LabeledInput = ({
   };
 
   return (
-    <StyledInputContainer
-      className={`${error ? "error" : ""}`}
-      onClick={handleClick}
-    >
-      <StyledInputTitle
-        className={`${focus ? "active-label" : ""} ${error ? "error" : ""}`}
-      >
-        {title}
-      </StyledInputTitle>
-      <StyledInputElement
-        type={type}
-        required={required}
-        placeholder={placeholder}
+    <>
+      <StyledInputContainer
+        className={`${error ? "error" : ""}`}
+        onClick={handleClick}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        onChange={onChange}
-        className={error ? "error" : ""}
-        ref={inputRef}
-      />
-    </StyledInputContainer>
+      >
+        <StyledInputTitle
+          className={`${focus ? "active-label" : ""} ${error ? "error" : ""}`}
+        >
+          {title}
+        </StyledInputTitle>
+        <Field name={name}>
+          {({ field }: any) => (
+            <>
+              <StyledInputElement
+                type={type}
+                required={required}
+                placeholder={placeholder}
+                className={error ? "error" : ""}
+                ref={inputRef}
+                {...field}
+              />
+            </>
+          )}
+        </Field>
+      </StyledInputContainer>
+      <ErrorMessage name={name} component="p" className="error-message" />
+    </>
   );
 };
 

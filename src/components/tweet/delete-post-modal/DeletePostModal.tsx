@@ -1,40 +1,42 @@
-import React, { useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { DeleteIcon } from "../../icon/Icon";
 import Modal from "../../modal/Modal";
 import Button from "../../button/Button";
-import { updateFeed } from "../../../redux/user";
-import { useHttpRequestService } from "../../../service/HttpRequestService";
 import { useTranslation } from "react-i18next";
 import { ButtonType } from "../../button/StyledButton";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { Post } from "../../../service";
 import { StyledDeletePostModalContainer } from "./DeletePostModalContainer";
+import { useDeletePostById } from "../../../hooks/htttpServicesHooks/post.hooks";
+import { useDeleteCommentById } from "../../../hooks/htttpServicesHooks/comment.hooks";
 
 interface DeletePostModalProps {
   show: boolean;
   onClose: () => void;
   id: string;
+  parentId: string | undefined;
+  reference: MutableRefObject<HTMLDivElement>;
 }
 
 export const DeletePostModal = ({
   show,
   id,
   onClose,
+  parentId,
+  reference,
 }: DeletePostModalProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const feed = useAppSelector((state) => state.user.feed);
-  const dispatch = useAppDispatch();
-  const service = useHttpRequestService();
   const { t } = useTranslation();
-
+  const { mutate: deletePost } = useDeletePostById();
+  const { mutate: deleteComment } = useDeleteCommentById();
   const handleDelete = () => {
     try {
-      service.deletePost(id).then((res) => console.log(res));
-      const newFeed = feed.filter((post: Post) => post.id !== id);
-      dispatch(updateFeed(newFeed));
+      if (parentId !== undefined && parentId !== null) {
+        deleteComment({ id, parentId });
+      } else {
+        deletePost(id);
+      }
       handleClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -47,11 +49,15 @@ export const DeletePostModal = ({
     <>
       {show && (
         <>
-          <StyledDeletePostModalContainer onClick={() => setShowModal(true)}>
+          <StyledDeletePostModalContainer
+            ref={reference}
+            onClick={() => setShowModal(true)}
+          >
             <DeleteIcon />
             <p>{t("buttons.delete")}</p>
           </StyledDeletePostModalContainer>
           <Modal
+            reference={reference}
             title={t("modal-title.delete-post") + "?"}
             text={t("modal-content.delete-post")}
             show={showModal}

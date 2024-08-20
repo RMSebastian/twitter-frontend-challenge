@@ -421,6 +421,7 @@ export const LikeIcon = (props: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       onClick={props.onClick}
       cursor={"pointer"}
+      data-testid={"svg-like-icon"}
     >
       <g id="SVG=Like">
         <path

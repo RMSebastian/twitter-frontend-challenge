@@ -1,42 +1,31 @@
-import React, {useEffect, useState} from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import Modal from "../../modal/Modal";
 import logo from "../../../assets/logo.png";
 import Button from "../../button/Button";
-import {useNavigate} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SwitchButton from "../../switch/SwitchButton";
-import {ButtonType} from "../../button/StyledButton";
-import {StyledPromptContainer} from "./PromptContainer";
-import {StyledContainer} from "../../common/Container";
-import {StyledP} from "../../common/text";
-import {useHttpRequestService} from "../../../service/HttpRequestService";
-import {User} from "../../../service";
+import { ButtonType } from "../../button/StyledButton";
+import { StyledPromptContainer } from "./PromptContainer";
+import { StyledContainer } from "../../common/Container";
+import { StyledP } from "../../common/text";
+import { useGetMyUser } from "../../../hooks/htttpServicesHooks/user.hooks";
 
 interface LogoutPromptProps {
   show: boolean;
+  reference?: MutableRefObject<HTMLDivElement>;
 }
 
-const LogoutPrompt = ({ show }: LogoutPromptProps) => {
+const LogoutPrompt = ({ show, reference }: LogoutPromptProps) => {
   const [showPrompt, setShowPrompt] = useState<boolean>(show);
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const service = useHttpRequestService()
-  const [user, setUser] = useState<User>()
-
-
-  useEffect(() => {
-    handleGetUser().then(r => setUser(r))
-  }, []);
-
-  const handleGetUser = async () => {
-    return await service.me()
-  }
+  const { data: user } = useGetMyUser();
 
   const handleClick = () => {
     setShowModal(true);
   };
-
 
   const handleLanguageChange = () => {
     if (i18n.language === "es") {
@@ -50,7 +39,6 @@ const LogoutPrompt = ({ show }: LogoutPromptProps) => {
     localStorage.removeItem("token");
     navigate("/sign-in");
   };
-
   useEffect(() => {
     setShowPrompt(show);
   }, [show]);
@@ -80,6 +68,7 @@ const LogoutPrompt = ({ show }: LogoutPromptProps) => {
         </StyledPromptContainer>
       )}
       <Modal
+        reference={reference}
         show={showModal}
         text={t("modal-content.logout")}
         img={logo}

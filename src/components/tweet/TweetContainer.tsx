@@ -9,7 +9,7 @@ export const StyledTweetContainer = styled.div`
   box-sizing: border-box;
   gap: 16px;
   margin: 0;
-  border-bottom: 1px solid ${(props) => props.theme.colors.containerLine};
+  border: 1px solid ${(props) => props.theme.colors.containerLine};
 
   p {
     color: ${(props) => props.theme.colors.black};

@@ -1,36 +1,31 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Tab from "./tab/Tab";
-import { setQuery, updateFeed } from "../../../../../redux/user";
-import { useHttpRequestService } from "../../../../../service/HttpRequestService";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../../../../redux/hooks";
 import { StyledTabBarContainer } from "./TabBarContainer";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePage } from "../../../../../redux/post";
+import { RootState } from "../../../../../redux/store";
 
 const TabBar = () => {
-  const [activeFirstPage, setActiveFirstPage] = useState(true);
-  const dispatch = useAppDispatch();
-  const service = useHttpRequestService();
+  const { activeFirstPage } = useSelector((state: RootState) => state.post);
+  const [activePage, setActivePage] = useState(activeFirstPage);
   const { t } = useTranslation();
-
+  const dispatch = useDispatch();
   const handleClick = async (value: boolean, query: string) => {
-    setActiveFirstPage(value);
-    dispatch(setQuery(query));
-    const data = await service.getPosts(query).catch((e) => {
-      console.log(e);
-    });
-    dispatch(updateFeed(data));
+    setActivePage(value);
+    dispatch(updatePage(value));
   };
 
   return (
     <>
       <StyledTabBarContainer>
         <Tab
-          active={activeFirstPage}
+          active={activePage}
           text={t("header.for-you")}
           onClick={() => handleClick(true, "")}
         />
         <Tab
-          active={!activeFirstPage}
+          active={!activePage}
           text={t("header.following")}
           onClick={() => handleClick(false, "following")}
         />

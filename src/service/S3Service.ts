@@ -1,12 +1,14 @@
 import axios from "axios";
 
+const uninterceptedAxiosInstance = axios.create();
+
 export const S3Service = {
   upload: async (file: File, url: string) => {
     const blob = new Blob([file], { type: file.type });
 
-    await axios.put(url, blob, {
+    await uninterceptedAxiosInstance.put(url, blob, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": file.type,
       },
     });
   },

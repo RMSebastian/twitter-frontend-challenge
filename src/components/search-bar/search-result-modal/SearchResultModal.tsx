@@ -1,12 +1,12 @@
 import React from "react";
-import { Author } from "../../../service";
+import { AuthorDTO } from "../../../service";
 import UserDataBox from "../../user-data-box/UserDataBox";
 import { StyledContainer } from "../../common/Container";
 import { StyledSearchResultModalContainer } from "./SearchResultModalContainer";
 
 interface SearchResultModalProps {
   show: boolean;
-  results: Author[];
+  results: AuthorDTO[];
 }
 export const SearchResultModal = ({
   show,
@@ -25,7 +25,7 @@ export const SearchResultModal = ({
                     username={author.username}
                     name={author.name!}
                     id={author.id}
-                    profilePicture={author.profilePicture!}
+                    profilePicture={author.image!}
                   />
                 );
               })}

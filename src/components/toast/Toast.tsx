@@ -1,34 +1,32 @@
-import React, { useState } from "react";
 import { StyledToastContainer } from "./ToastContainer";
-import { AlertIcon } from "../icon/Icon";
+import { AlertIcon, LikeIcon } from "../icon/Icon";
 
 export enum ToastType {
   ALERT = "ALERT",
+  SUCCESS = "SUCCESS",
 }
 
 interface ToastProps {
   message: string;
   type: ToastType;
-  show?: boolean;
 }
 
-const Toast = ({ message, type, show }: ToastProps) => {
-  const [isShown, setIsShown] = useState<boolean>(show ?? true);
-
+const Toast = ({ message, type }: ToastProps) => {
   const iconMap = {
     [ToastType.ALERT]: <AlertIcon />,
+    [ToastType.SUCCESS]: <LikeIcon />,
   };
 
   const toastIcon = iconMap[type] || null;
 
   return (
     <>
-      {isShown && (
-        <StyledToastContainer type={type} onClick={() => setIsShown(false)}>
+      {
+        <StyledToastContainer type={type}>
           {toastIcon}
           <p>{message}</p>
         </StyledToastContainer>
-      )}
+      }
     </>
   );
 };

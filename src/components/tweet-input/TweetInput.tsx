@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from "react";
 import Avatar from "../common/avatar/Avatar";
-import Icon from "../../assets/icon.jpg";
+import Icon from "../../assets/icon.png";
 import { StyledTweetInputContainer } from "./TweetInputContainer";
 import { StyledBorderlessTextArea } from "./BorderlessTextArea";
 

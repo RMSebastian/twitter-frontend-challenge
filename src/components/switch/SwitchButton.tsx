@@ -43,12 +43,16 @@ interface SwitchButtonProps {
   checked: boolean;
   onChange: () => void;
 }
-
 const SwitchButton = ({ checked, onChange }: SwitchButtonProps) => {
   return (
-    <StyledSwitchContainer onClick={onChange}>
-      <StyledInput type="checkbox" checked={checked} />
-      <StyledLabel checked={checked} />
+    <StyledSwitchContainer>
+      <StyledInput
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        id="unique-switch-button"
+      />
+      <StyledLabel checked={checked} htmlFor={"unique-switch-button"} />
     </StyledSwitchContainer>
   );
 };

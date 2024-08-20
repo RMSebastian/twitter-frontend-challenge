@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useRef } from "react";
 import { StyledContainer } from "./Container";
 import Action from "../../assets/action.svg";
+import { useToast } from "../toast/ToastProvider";
+import { ToastType } from "../toast/Toast";
 
 interface ImageInputProps {
   setImages: (images: File[]) => void;
@@ -9,12 +11,26 @@ interface ImageInputProps {
 
 const ImageInput = ({ setImages, parentId }: ImageInputProps) => {
   const fileInputRef = useRef(null);
-
+  const { addToast } = useToast();
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const uploadedImages = Array.from(files!).slice(0, 4);
-      setImages(uploadedImages);
+      const validImages = uploadedImages.filter((file) =>
+        file.type.startsWith("image/")
+      );
+      if (validImages.length !== uploadedImages.length) {
+        addToast({
+          message: "Error: a file is not an image",
+          type: ToastType.ALERT,
+        });
+      } else {
+        setImages(uploadedImages);
+        addToast({
+          message: "Images added sucessfully",
+          type: ToastType.SUCCESS,
+        });
+      }
     }
   };
 

@@ -43,6 +43,7 @@ const StyledSignInWrapper = styled.div`
     font-weight: 400;
     line-height: 13px;
     letter-spacing: -0.01em;
+    margin: 0px;
   }
 
   /* Media query for screens larger than the phone size */

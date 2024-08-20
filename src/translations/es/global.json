@@ -32,10 +32,14 @@
     "search": "Buscar en twitter",
     "tweet": "¡¿Que está pasando?!",
     "send": "Envíar un nuevo mensaje",
-    "comment": "Escribe tu respuesta"
+    "comment": "Escribe tu respuesta",
+    "email": "Escribe tu email...",
+    "password": "Escribe tu contraseña...",
+    "message": "Escribe tu mensaje..."
   },
   "error": {
-    "login": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo."
+    "login": "Lo siento, tu nombre de usuario o contraseña es incorrecto. Por favor, inténtalo de nuevo.",
+    "signup": "Lo siento, el usuario que estas creando ya existe"
   },
   "input-params": {
     "username": "Nombre de usuario",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyledContentContainer } from "./StyledContentContainer";
 import Header from "../header/Header";
 import TweetBox from "../../../../components/tweet-box/TweetBox";
@@ -7,16 +7,13 @@ import ContentFeed from "../../../../components/feed/ContentFeed";
 import { StyledContainer } from "../../../../components/common/Container";
 
 const ContentContainer = () => {
+  const [mobile, setMobile] = useState<boolean>(window.innerWidth > 600);
   return (
     <StyledContentContainer>
-      <Header />
       <StyledFeedContainer>
-        <StyledContainer
-          width={"100%"}
-          padding={"16px"}
-          borderBottom={"1px solid #ebeef0"}
-        >
-          <TweetBox />
+        <StyledContainer width={"100%"} height={"auto"}>
+          <Header />
+          {mobile && <TweetBox />}
         </StyledContainer>
         <StyledContainer minHeight={"66vh"} width={"100%"}>
           <ContentFeed />

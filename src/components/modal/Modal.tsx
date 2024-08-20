@@ -1,11 +1,12 @@
-import React, { ReactNode } from "react";
+import React, { MutableRefObject, ReactNode } from "react";
 import { StyledBlurredBackground } from "../common/BlurredBackground";
 import Button from "../button/Button";
 import { ButtonType } from "../button/StyledButton";
 import { StyledModalContainer } from "./ModalContainer";
 import { StyledContainer } from "../common/Container";
 import { StyledH5, StyledP } from "../common/text";
-
+import ReactDom from "react-dom";
+import { useClickAway } from "@uidotdev/usehooks";
 interface ModalProps {
   show: boolean;
   title: string;
@@ -13,6 +14,7 @@ interface ModalProps {
   img?: string;
   onClose: () => void;
   acceptButton: ReactNode;
+  reference?: MutableRefObject<HTMLDivElement>;
 }
 
 const Modal = ({
@@ -22,12 +24,13 @@ const Modal = ({
   onClose,
   img,
   title,
+  reference,
 }: ModalProps) => {
-  return (
+  return ReactDom.createPortal(
     <>
       {show && (
         <StyledBlurredBackground>
-          <StyledModalContainer>
+          <StyledModalContainer ref={reference}>
             <StyledContainer alignItems={"center"} justifyContent={"center"}>
               {img && (
                 <img src={img} alt={"modal"} width={"32px"} height={"26px"} />
@@ -56,7 +59,8 @@ const Modal = ({
           </StyledModalContainer>
         </StyledBlurredBackground>
       )}
-    </>
+    </>,
+    document.getElementById("portal")!
   );
 };
 

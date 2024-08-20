@@ -9,6 +9,9 @@ import global_es from "../../translations/es/global.json";
 import { store } from "../../redux/store";
 import { LightTheme } from "../../util/LightTheme";
 import { ROUTER } from "./Router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastProvider } from "../toast/ToastProvider";
 
 i18next.use(initReactI18next).init({
   interpolation: { escapeValue: false },
@@ -23,15 +26,21 @@ i18next.use(initReactI18next).init({
   },
   fallbackLng: "en",
 });
+export const queryClient = new QueryClient();
 
 export const Layout = () => {
   return (
-    <I18nextProvider i18n={i18next}>
-      <Provider store={store}>
-        <ThemeProvider theme={LightTheme}>
-          <RouterProvider router={ROUTER} />
-        </ThemeProvider>
-      </Provider>
-    </I18nextProvider>
+    <QueryClientProvider client={queryClient}>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <I18nextProvider i18n={i18next}>
+        <Provider store={store}>
+          <ThemeProvider theme={LightTheme}>
+            <ToastProvider>
+              <RouterProvider router={ROUTER} />
+            </ToastProvider>
+          </ThemeProvider>
+        </Provider>
+      </I18nextProvider>
+    </QueryClientProvider>
   );
 };

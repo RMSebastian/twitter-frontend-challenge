@@ -1,7 +1,7 @@
 import React from "react";
 import { StyledContainer } from "../../components/common/Container";
 import Avatar from "../../components/common/avatar/Avatar";
-import Icon from "../../assets/icon.jpg";
+import Icon from "../../assets/icon.png";
 import { StyledH5, StyledP } from "../../components/common/text";
 
 interface ProfileInfoContainerProps {

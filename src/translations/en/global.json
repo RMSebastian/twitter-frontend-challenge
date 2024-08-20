@@ -8,7 +8,8 @@
   },
   "navbar": {
     "home": "Home",
-    "profile": "Profile"
+    "profile": "Profile",
+    "message": "Messages"
   },
   "suggestion": {
     "who-to-follow": "Who to follow",
@@ -30,10 +31,14 @@
     "search": "Search Twitter",
     "tweet": "What's happening?!",
     "send": "Send a new message",
-    "comment" : "Tweet your reply"
+    "comment" : "Tweet your reply",
+    "email": "Enter your Email...",
+    "password": "Enter your password...",
+    "message": "Type your message..."
   },
   "error": {
-    "login": "Sorry, your username or password was incorrect. Please try again."
+    "login": "Sorry, your username or password was incorrect. Please try again.",
+    "signup": "Sorry, the user you are creating already exist. Please try again."
   },
   "input-params": {
     "username": "Username",

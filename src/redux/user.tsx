@@ -1,9 +1,9 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {LIMIT} from "../util/Constants";
-import {ChatDTO, Post} from "../service";
+import { createSlice } from "@reduxjs/toolkit";
+import { LIMIT } from "../util/Constants";
+import { ChatDTO, PostDTO } from "../service";
 
 type InitalStateType = {
-  feed: Post[];
+  feed: PostDTO[];
   query: string;
   length: number;
   currentChat?: ChatDTO;
@@ -41,7 +41,7 @@ const userSlice = createSlice({
   },
 });
 
-export const {updateFeed, setLength, setQuery, setChat, addMessage} =
-    userSlice.actions;
+export const { updateFeed, setLength, setQuery, setChat, addMessage } =
+  userSlice.actions;
 
 export default userSlice.reducer;

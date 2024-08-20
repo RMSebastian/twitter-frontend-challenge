@@ -10,6 +10,8 @@ import ProfilePage from "../../pages/profile/ProfilePage";
 import TweetPage from "../../pages/create-tweet-page/TweetPage";
 import CommentPage from "../../pages/create-comment-page/CommentPage";
 import PostPage from "../../pages/post-page/PostPage";
+import PrivateRoute from "./privateRoute";
+import ChatPage from "../../pages/chat-page/ChatPage";
 
 const WithNav = () => {
   return (
@@ -30,31 +32,40 @@ export const ROUTER = createBrowserRouter([
     element: <SignInPage />,
   },
   {
-    element: <WithNav />,
+    element: <PrivateRoute />,
     children: [
       {
-        path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "/recommendations",
-        element: <RecommendationPage />,
-      },
-      {
-        path: "/profile/:id",
-        element: <ProfilePage />,
-      },
-      {
-        path: "/post/:id",
-        element: <PostPage />,
-      },
-      {
-        path: "/compose/tweet",
-        element: <TweetPage />,
-      },
-      {
-        path: "/post/:id",
-        element: <CommentPage />,
+        element: <WithNav />,
+        children: [
+          {
+            path: "/",
+            element: <HomePage />,
+          },
+          {
+            path: "/recommendations",
+            element: <RecommendationPage />,
+          },
+          {
+            path: "/profile/:id",
+            element: <ProfilePage />,
+          },
+          {
+            path: "/post/:id",
+            element: <PostPage />,
+          },
+          {
+            path: "/compose/tweet",
+            element: <TweetPage />,
+          },
+          {
+            path: "/comment/:id",
+            element: <CommentPage />,
+          },
+          {
+            path: "/chat",
+            element: <ChatPage />,
+          },
+        ],
       },
     ],
   },

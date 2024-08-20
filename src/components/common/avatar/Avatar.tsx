@@ -12,8 +12,13 @@ interface AvatarProps {
 
 const Avatar = ({ src, alt, onClick, width, height }: AvatarProps) => {
   return (
-    <StyledAvatarContainer onClick={onClick} width={width} height={height}>
-      {src !== null ? <img src={src} alt={alt} /> : <NameImage name={alt} />}
+    <StyledAvatarContainer
+      onClick={onClick}
+      width={width}
+      height={height}
+      data-testid="avatar-container"
+    >
+      {src !== "" ? <img src={src} alt={alt} /> : <NameImage name={alt} />}
     </StyledAvatarContainer>
   );
 };

@@ -23,11 +23,11 @@ const Reaction = ({
     try {
       await reactionFunction();
       setReactionCount(
-        reactionReacted ? reactionCount - increment : reactionCount + 1
+        reactionReacted ? reactionCount - increment : reactionCount + increment
       );
       setReactionReacted(!reactionReacted);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

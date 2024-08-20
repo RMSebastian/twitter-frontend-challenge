@@ -1,25 +1,24 @@
-import React from "react";
-import { Post } from "../../service";
+import { PostDTO } from "../../service";
 import { StyledContainer } from "../common/Container";
 import Tweet from "../tweet/Tweet";
-import Loader from "../loader/Loader";
 
 interface FeedProps {
-  posts: Post[];
+  posts: PostDTO[];
   loading: boolean;
 }
 
 const Feed = ({ posts, loading }: FeedProps) => {
   return (
-    <StyledContainer width={"100%"} alignItems={"center"}>
-      {posts
-        .filter((post, index, self) => {
-          return self.findIndex((p) => p.id === post.id) === index;
-        })
-        .map((post: Post) => (
-          <Tweet key={post.id} post={post} />
-        ))}
-      {loading && <Loader />}
+    <StyledContainer width={"100%"} alignItems={"center"} height={"auto"}>
+      {posts.length > 0 ? (
+        posts
+          .filter((post, index, self) => {
+            return self.findIndex((p) => p.id === post.id) === index;
+          })
+          .map((post: PostDTO) => <Tweet key={post.id} postDto={post} />)
+      ) : (
+        <></>
+      )}
     </StyledContainer>
   );
 };

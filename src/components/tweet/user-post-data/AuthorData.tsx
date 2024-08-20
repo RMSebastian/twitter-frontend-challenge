@@ -1,7 +1,7 @@
 import React from "react";
 import { StyledAuthorDataContainer } from "./AuthorDataContainer";
 import Avatar from "../../common/avatar/Avatar";
-import Icon from "../../../assets/icon.jpg";
+import Icon from "../../../assets/icon.png";
 import { StyledDot } from "../../common/Dot";
 import { useNavigate } from "react-router-dom";
 

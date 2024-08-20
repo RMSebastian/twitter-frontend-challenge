@@ -1,55 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BackArrowIcon } from "../../components/icon/Icon";
 import Button from "../../components/button/Button";
-import {Post, User} from "../../service";
 import AuthorData from "../../components/tweet/user-post-data/AuthorData";
 import ImageContainer from "../../components/tweet/tweet-image/ImageContainer";
-import { useLocation } from "react-router-dom";
-import { useHttpRequestService } from "../../service/HttpRequestService";
 import TweetInput from "../../components/tweet-input/TweetInput";
 import ImageInput from "../../components/common/ImageInput";
-import { setLength, updateFeed } from "../../redux/user";
 import { useTranslation } from "react-i18next";
 import { ButtonType } from "../../components/button/StyledButton";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { StyledContainer } from "../../components/common/Container";
 import { StyledLine } from "../../components/common/Line";
 import { StyledP } from "../../components/common/text";
+import { useGetCommentById } from "../../hooks/htttpServicesHooks/comment.hooks";
+import { useGetMyUser } from "../../hooks/htttpServicesHooks/user.hooks";
 
 const CommentPage = () => {
   const [content, setContent] = useState("");
-  const [post, setPost] = useState<Post | undefined>(undefined);
   const [images, setImages] = useState<File[]>([]);
-  const [user, setUser] = useState<User>()
-  const postId = useLocation().pathname.split("/")[3];
-  const service = useHttpRequestService();
-  const { length, query } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
+  const commentId = window.location.href.split("/")[4];
+  const { data: comment, isLoading: loadingComment } =
+    useGetCommentById(commentId);
+  const { data: user } = useGetMyUser();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    handleGetUser().then(r => setUser(r))
-  }, []);
-
-  const handleGetUser = async () => {
-    return await service.me()
-  }
-
-  useEffect(() => {
-    window.innerWidth > 600 && exit();
-  }, []);
-
-  useEffect(() => {
-    service
-      .getPostById(postId)
-      .then((res) => {
-        setPost(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [postId]);
-
   const exit = () => {
     window.history.back();
   };
@@ -57,15 +28,16 @@ const CommentPage = () => {
   const handleSubmit = async () => {
     setContent("");
     setImages([]);
-    dispatch(setLength(length + 1));
-    const posts = await service.getPosts(query);
-    dispatch(updateFeed(posts));
+
     exit();
   };
   const handleRemoveImage = (index: number) => {
     const newImages = images.filter((i, idx) => idx !== index);
     setImages(newImages);
   };
+  useEffect(() => {
+    window.innerWidth > 600 && exit();
+  }, []);
 
   return (
     <StyledContainer padding={"16px"}>
@@ -73,6 +45,7 @@ const CommentPage = () => {
         flexDirection={"row"}
         alignItems={"center"}
         justifyContent={"space-between"}
+        height={"10%"}
       >
         <BackArrowIcon onClick={exit} />
         <Button
@@ -80,23 +53,23 @@ const CommentPage = () => {
           buttonType={ButtonType.DEFAULT}
           size={"SMALL"}
           onClick={handleSubmit}
-          disabled={content.length === 0}
+          disabled={content.length === 0 || loadingComment}
         />
       </StyledContainer>
-      {post && (
-        <StyledContainer gap={"16px"}>
+      {comment && !loadingComment && (
+        <StyledContainer gap={"16px"} height={"20%"}>
           <AuthorData
-            id={post.authorId}
-            name={post.author.name ?? "Name"}
-            username={post.author.username}
-            createdAt={post.createdAt}
-            profilePicture={post.author.profilePicture}
+            id={comment.authorId}
+            name={comment.author?.name ?? "Name"}
+            username={comment.author?.username}
+            createdAt={comment.createdAt}
+            profilePicture={comment.author?.image}
           />
           <StyledContainer flexDirection={"row"}>
             <StyledLine />
             <StyledContainer gap={"8px"}>
-              <StyledP primary>{post.content}</StyledP>
-              {post.images && <ImageContainer images={post.images} />}
+              <StyledP primary>{comment.content}</StyledP>
+              {comment.images && <ImageContainer images={comment.images} />}
             </StyledContainer>
           </StyledContainer>
           <StyledContainer gap={"4px"}>
@@ -105,7 +78,7 @@ const CommentPage = () => {
               placeholder={t("placeholder.comment")}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              src={user?.profilePicture}
+              src={user?.image}
             />
             {images.length > 0 && (
               <ImageContainer
@@ -117,7 +90,7 @@ const CommentPage = () => {
             <StyledContainer padding={"0 0 0 10%"}>
               <ImageInput
                 setImages={setImages}
-                parentId={`comment-page-${postId}`}
+                parentId={`comment-page-${commentId}`}
               />
             </StyledContainer>
           </StyledContainer>

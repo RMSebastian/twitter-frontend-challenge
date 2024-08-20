@@ -12,7 +12,7 @@ const TweetPage = () => {
   }, []);
 
   return (
-    <StyledContainer padding={"16px"} borderBottom={"1px solid #ebeef0"}>
+    <StyledContainer>
       <TweetBox close={exit} mobile borderless />
     </StyledContainer>
   );
