@@ -30,7 +30,7 @@ const ChatPage = () => {
     socketIo.on("connect", () => {
       setSocket(socketIo);
       setFriendId(otherUserId);
-      socketIo.emit("joinLobby", {});
+      socketIo.emit("joinLobby");
     });
 
     socketIo.on("error", (error) => {
@@ -39,6 +39,7 @@ const ChatPage = () => {
 
     socketIo.on("joinLobby", (object: AuthorDTO[]) => {
       SetFriends(object);
+      console.log(object);
     });
 
     socketIo.on("createRoom", (object: ChatDTO) => {
