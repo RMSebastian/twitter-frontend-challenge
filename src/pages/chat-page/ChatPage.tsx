@@ -21,7 +21,7 @@ const ChatPage = () => {
   const [friendId, setFriendId] = useState<string>("");
   const dispatch = useDispatch();
   useEffect(() => {
-    const socketIo = io(process.env.REACT_APP_API_DEV_URL!, {
+    const socketIo = io(process.env.REACT_APP_API_DEV_SOCKET_URL!, {
       extraHeaders: {
         Authorization: token!,
       },
