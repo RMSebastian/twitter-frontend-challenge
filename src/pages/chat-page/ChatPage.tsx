@@ -21,7 +21,7 @@ const ChatPage = () => {
   const [friendId, setFriendId] = useState<string>("");
   const dispatch = useDispatch();
   useEffect(() => {
-    const socketIo = io(process.env.REACT_APP_API_DEV_URL!, {
+    const socketIo = io(process.env.REACT_APP_API_DEV_SOCKET_URL!, {
       extraHeaders: {
         Authorization: token!,
       },
@@ -30,7 +30,7 @@ const ChatPage = () => {
     socketIo.on("connect", () => {
       setSocket(socketIo);
       setFriendId(otherUserId);
-      socketIo.emit("joinLobby", {});
+      socketIo.emit("joinLobby");
     });
 
     socketIo.on("error", (error) => {
@@ -39,6 +39,7 @@ const ChatPage = () => {
 
     socketIo.on("joinLobby", (object: AuthorDTO[]) => {
       SetFriends(object);
+      console.log(object);
     });
 
     socketIo.on("createRoom", (object: ChatDTO) => {
