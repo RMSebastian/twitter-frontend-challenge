@@ -11,13 +11,6 @@ import Chat from "../../components/chat/Chat";
 import { useDispatch } from "react-redux";
 import { updateUserId } from "../../redux/chat";
 
-
-// Define la URL del servidor aquí
-const URL: string =
-  process.env.NODE_ENV === "production"
-    ? "https://your-production-url.com"
-    : "http://localhost:8080";
-
 const ChatPage = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const { token } = useToken();
@@ -28,7 +21,7 @@ const ChatPage = () => {
   const [friendId, setFriendId] = useState<string>("");
   const dispatch = useDispatch();
   useEffect(() => {
-    const socketIo = io(URL, {
+    const socketIo = io(process.env.REACT_APP_API_DEV_URL!, {
       extraHeaders: {
         Authorization: token!,
       },
