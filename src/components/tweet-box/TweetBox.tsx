@@ -98,7 +98,7 @@ useEffect(()=>{
         />
         <StyledContainer
           padding={"0 0 0 10%"}
-          overflow="scroll"
+          overflow="auto"
           maxHeight={"150px"}
         >
           <ImageContainer

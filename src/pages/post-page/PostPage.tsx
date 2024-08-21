@@ -27,7 +27,7 @@ const PostPage = () => {
           </StyledContainer>
           {data && !isLoading ? (
             <>
-              <StyledContainer flex={"2.5 1 0%"} overflow="scroll">
+              <StyledContainer flex={"2.5 1 0%"} overflow="auto">
                 <Tweet postDto={data} />
               </StyledContainer>
 

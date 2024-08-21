@@ -67,7 +67,7 @@ const CommentPage = () => {
           />
           <StyledContainer flexDirection={"row"}>
             <StyledLine />
-            <StyledContainer gap={"8px"} overflow="scroll" paddingRight={"16px"}>
+            <StyledContainer gap={"8px"} overflow="auto" paddingRight={"16px"}>
               <StyledP primary>{comment.content}</StyledP>
               {comment.images && <ImageContainer images={comment.images} />}
             </StyledContainer>

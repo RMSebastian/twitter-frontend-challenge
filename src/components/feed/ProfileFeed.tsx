@@ -19,7 +19,7 @@ const ProfileFeed = () => {
   if (id) {
     return (
       <>
-        <div style={{ overflowY: "scroll" }}>
+        <div style={{ overflowY: "auto" }}>
           {data?.pages.map((d, index) => {
             return <Feed key={index} posts={d ? d : []} loading={isLoading} />;
           })}
