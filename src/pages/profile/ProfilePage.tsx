@@ -44,15 +44,15 @@ const ProfilePage = () => {
   const { t } = useTranslation();
 
   const { data: user, isLoading: loadingUser } = useGetMyUser();
-  const { data: profile } = useGetUserById(id || "");
+  const { data: profile, isLoading: loadingProfile } = useGetUserById(id || "");
   const { mutate: unfollowUser } = useUnfollowUser();
   const { mutate: followUser } = useFollowUser();
   const { deleteUser } = useDeleteUser();
   const [following, setFollowing] = useState<boolean>(checkFollowingStatus);
 
   useEffect(()=>{
-    setFollowing(checkFollowingStatus);
-  },[user])
+    if(!loadingUser && !loadingProfile)setFollowing(checkFollowingStatus);
+  },[loadingUser,loadingProfile])
   if (!id) return null;
 
   const handleButtonType = (): { component: ButtonType; text: string } => {
