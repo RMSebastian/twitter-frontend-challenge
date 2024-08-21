@@ -1,13 +1,13 @@
-import { QueryKey, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   createReaction_param_endpoint,
   deleteReaction_param_endpoint,
 } from "../../endpoints";
 import { PostDTO, ReactionData, ReactionDTO } from "../../service";
 import { deleteData, postData } from "../../service/HttpRequestService";
-import { queryClient } from "../../components/layout/Layout";
 import { useToast } from "../../components/toast/ToastProvider";
 import { ToastType } from "../../components/toast/Toast";
+import { updateInfiniteQueryReaction, updateQueryReaction } from "../../service/ReactQueryUpdateCache";
 
 type usePostReactionProps = {
   postId: string;
@@ -27,27 +27,27 @@ export const usePostReaction = (isPost: boolean, parentId: string | null) => {
       )},
     onSuccess: (data, variables) => {
       if (isPost) {
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getAllPosts"],
           true,
           variables.postId,
           data
         );
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getPostByUser", data.userId],
           true,
           variables.postId,
           data
         );
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getCommentsByPostId", parentId],
           true,
           variables.postId,
           data
         );
-        updateReactionQuery(["getPostById", variables.postId], true, data);
+        updateQueryReaction(["getPostById", variables.postId], true, data);
       } else {
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getCommentsById", variables.postId],
           true,
           variables.postId,
@@ -79,27 +79,27 @@ export const useDeleteReaction = (
       ,
     onSuccess: (data, reactionId) => {
       if (isPost) {
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getAllPosts"],
           false,
           reactionId,
           undefined
         );
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getPostByUser", data.userId],
           true,
           reactionId,
           undefined
         );
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getCommentsByPostId", parentId],
           true,
           reactionId,
           undefined
         );
-        updateReactionQuery(["getPostById", post.id], true, data);
+        updateQueryReaction(["getPostById", post.id], true, data);
       } else {
-        updateCommentInfiniteQuery(
+        updateInfiniteQueryReaction(
           ["getCommentsById", post.id],
           true,
           reactionId,
@@ -118,64 +118,4 @@ export const useDeleteReaction = (
   });
 };
 
-export const updateCommentInfiniteQuery = (
-  queryKey: QueryKey,
-  isIncremental: boolean,
-  postId?: string,
-  reaction?: ReactionDTO
-) => {
-  queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
-    queryKey,
-    (oldData) => {
-      if (oldData) {
-        if (isIncremental && reaction) {
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page) =>
-              page.map((post) =>
-                post.id === postId
-                  ? {
-                      ...post,
-                      reactions: [...post.reactions, reaction],
-                    }
-                  : post
-              )
-            ),
-          };
-        } else if (postId) {
-          //reactionId from this point
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page) =>
-              page.map((post) => {
-                return {
-                  ...post,
-                  reactions: post.reactions.filter((r) => r.id !== postId),
-                };
-              })
-            ),
-          };
-        }
-      }
-      return oldData;
-    }
-  );
-};
-export const updateReactionQuery = (
-  queryKey: QueryKey,
-  isIncremental: boolean,
-  reaction?: ReactionDTO
-) => {
-  queryClient.setQueryData<PostDTO>(queryKey, (oldData) => {
-    if (!oldData || !reaction) return oldData;
 
-    const updatedReactions = isIncremental
-      ? [...oldData.reactions, reaction]
-      : oldData.reactions.filter((r) => r.id !== reaction.id);
-
-    return {
-      ...oldData,
-      reactions: updatedReactions,
-    };
-  });
-};

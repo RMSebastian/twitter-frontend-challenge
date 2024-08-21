@@ -19,6 +19,7 @@ import { useToast } from "../../components/toast/ToastProvider";
 import { ToastType } from "../../components/toast/Toast";
 import { CursorPagination } from "../../util/Pagination";
 import { LIMIT } from "../../util/Constants";
+import { updateInfiniteQueryPost } from "../../service/ReactQueryUpdateCache";
 
 //Use Query
 export const useGetPosts = () => {
@@ -123,34 +124,31 @@ export const usePostPost = () => {
   return useMutation<PostDTO, Error, PostData>({
     mutationKey: ["usePostPost"],
     mutationFn:async (data: PostData): Promise<PostDTO> => {
+      const { upload } = S3Service;
       const dto: usePostPostProps = {
         content: data.content,
         images: data.images?.map((image) => image.name),
         parentId: data.parentId,
       };
-
-      return await postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
-    },
-    onSuccess: async (data, variables) => {
-      const { upload } = S3Service;
-      if (data.images && data.images.length > 0) {
-        for (const imageUrl of data.images) {
-          const index: number = data.images.indexOf(imageUrl);
-          await upload(variables.images![index], imageUrl);
+      const post =await postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
+      
+      if (post.images && post.images.length > 0) {
+        for (let imageUrl of post.images) {
+          const index: number = post.images.indexOf(imageUrl);
+          await upload(data.images![index], imageUrl);
         }
+        post.images = data.images?.map((image,index) => URL.createObjectURL(data.images![index]));
       }
+      
+      return post;
+    },
+    onSuccess: async (data) => {
 
-      queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
+      updateInfiniteQueryPost(
         ["getAllPosts"],
-        (postPages) => {
-          if (postPages) {
-            return {
-              ...postPages,
-              pages: [[data], ...postPages.pages],
-            };
-          }
-          return postPages;
-        }
+        true,
+        undefined,
+        data,
       );
       addToast({
         message: "Post created successfully ",
@@ -171,21 +169,6 @@ export const useDeletePostById = () => {
       return await deleteData(deletePostById_param_endpoint(postId))
     },
     onSuccess: (data, postId) => {
-      queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
-        ["getAllPosts"],
-        (postPages) => {
-          console.log(postPages);
-          if (postPages) {
-            return {
-              ...postPages,
-              pages: postPages.pages.map((page) =>
-                page.filter((post) => post.id !== postId)
-              ),
-            };
-          }
-          return postPages;
-        }
-      );
       addToast({
         message: "Post deleted successfully",
         type: ToastType.SUCCESS,
