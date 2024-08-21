@@ -123,22 +123,25 @@ export const usePostPost = () => {
   return useMutation<PostDTO, Error, PostData>({
     mutationKey: ["usePostPost"],
     mutationFn:async (data: PostData): Promise<PostDTO> => {
+      const { upload } = S3Service;
       const dto: usePostPostProps = {
         content: data.content,
         images: data.images?.map((image) => image.name),
         parentId: data.parentId,
       };
-
-      return await postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
-    },
-    onSuccess: async (data, variables) => {
-      const { upload } = S3Service;
-      if (data.images && data.images.length > 0) {
-        for (const imageUrl of data.images) {
-          const index: number = data.images.indexOf(imageUrl);
-          await upload(variables.images![index], imageUrl);
+      const post =await postData<usePostPostProps, PostDTO>(postPost_endpoint, dto);
+      
+      if (post.images && post.images.length > 0) {
+        for (let imageUrl of post.images) {
+          const index: number = post.images.indexOf(imageUrl);
+          await upload(data.images![index], imageUrl);
         }
+        post.images = data.images?.map((image,index) => URL.createObjectURL(data.images![index]));
       }
+      
+      return post;
+    },
+    onSuccess: async (data) => {
 
       queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
         ["getAllPosts"],
