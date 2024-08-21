@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileInfo from "./ProfileInfo";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../components/modal/Modal";
@@ -49,6 +49,10 @@ const ProfilePage = () => {
   const { mutate: followUser } = useFollowUser();
   const { deleteUser } = useDeleteUser();
   const [following, setFollowing] = useState<boolean>(checkFollowingStatus);
+
+  useEffect(()=>{
+    setFollowing(checkFollowingStatus);
+  },[user])
   if (!id) return null;
 
   const handleButtonType = (): { component: ButtonType; text: string } => {
