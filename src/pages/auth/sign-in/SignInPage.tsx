@@ -9,6 +9,7 @@ import { StyledH3 } from "../../../components/common/text";
 import { useLogin } from "../../../hooks/htttpServicesHooks/auth.hooks";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import Loader from "../../../components/loader/Loader";
 
 const validationSchema = Yup.object({
   Email: Yup.string().email("Invalid email address").required("Required"),
@@ -21,7 +22,7 @@ const validationSchema = Yup.object({
     .required("Required"),
 });
 const SignInPage = () => {
-  const { mutate: signIn, isError: signInError } = useLogin();
+  const { mutate: signIn, isError: signInError, isPending } = useLogin();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const handleSubmit = async (
@@ -93,15 +94,16 @@ const SignInPage = () => {
                     text={t("buttons.login")}
                     buttonType={ButtonType.FOLLOW}
                     size={"MEDIUM"}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isPending}
                   />
                   <Button
                     text={t("buttons.register")}
                     buttonType={ButtonType.OUTLINED}
                     size={"MEDIUM"}
                     onClick={() => navigate("/sign-up")}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isPending}
                   />
+                  {(isPending || isSubmitting) && <Loader></Loader>}
                 </div>
               </Form>
             )}
