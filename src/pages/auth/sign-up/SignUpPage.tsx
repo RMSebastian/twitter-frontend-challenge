@@ -9,6 +9,7 @@ import { StyledH3 } from "../../../components/common/text";
 import { useSignup } from "../../../hooks/htttpServicesHooks/auth.hooks";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import Loader from "../../../components/loader/Loader";
 
 const validationSchema = Yup.object({
   Username: Yup.string()
@@ -41,7 +42,7 @@ interface SignUpData {
   confirmPassword: string;
 }
 const SignUpPage = () => {
-  const { mutate: signUp, isError: error } = useSignup();
+  const { mutate: signUp,isPending, isError: error } = useSignup();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -144,15 +145,16 @@ const SignUpPage = () => {
                     text={t("buttons.register")}
                     buttonType={ButtonType.FOLLOW}
                     size={"MEDIUM"}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isPending}
                   />
                   <Button
                     text={t("buttons.login")}
                     buttonType={ButtonType.OUTLINED}
                     size={"MEDIUM"}
                     onClick={() => navigate("/sign-in")}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isPending}
                   />
+                  {(isPending || isSubmitting) && <Loader></Loader>}
                 </div>
               </Form>
             )}
