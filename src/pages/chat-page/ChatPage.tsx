@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import Chat from "../../components/chat/Chat";
 import { useDispatch } from "react-redux";
 import { updateUserId } from "../../redux/chat";
+import { useTranslation } from "react-i18next";
 
 const ChatPage = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -20,6 +21,7 @@ const ChatPage = () => {
   const [mobile, setMobile] = useState<boolean>(false);
   const [friendId, setFriendId] = useState<string>("");
   const dispatch = useDispatch();
+  const {t} = useTranslation()
   useEffect(() => {
     const socketIo = io(process.env.REACT_APP_API_DEV_SOCKET_URL!, {
       extraHeaders: {
@@ -39,7 +41,6 @@ const ChatPage = () => {
 
     socketIo.on("joinLobby", (object: AuthorDTO[]) => {
       SetFriends(object);
-      console.log(object);
     });
 
     socketIo.on("createRoom", (object: ChatDTO) => {
@@ -47,7 +48,6 @@ const ChatPage = () => {
     });
 
     socketIo.on("createMessage", (object: MessageDTO) => {
-      console.log(object);
       setActualChat((prevChat) => {
         if (!prevChat) return null;
         return {
@@ -92,7 +92,7 @@ const ChatPage = () => {
           <StyledHeaderContainer
             style={{ display: "flex", justifyContent: "space-around" }}
           >
-            <p>Friends</p>
+            <p>{t("chat.friends-title")}</p>
           </StyledHeaderContainer>
           <StyledContainer>
             {friends &&
@@ -114,7 +114,6 @@ const ChatPage = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <p>select a friend</p>
         </StyledContainer>
       )}
     </>

@@ -19,9 +19,10 @@ import {
 } from "../../hooks/htttpServicesHooks/follow.hooks";
 import { useToast } from "../../components/toast/ToastProvider";
 import { ToastType } from "../../components/toast/Toast";
+import { AuthorDTO } from "../../service";
 
 const ProfilePage = () => {
-  const [following, setFollowing] = useState<boolean>(false);
+  
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState({
     text: "",
@@ -29,6 +30,12 @@ const ProfilePage = () => {
     type: ButtonType.DEFAULT,
     buttonText: "",
   });
+  const checkFollowingStatus = () => {
+    if (user && profile?.id !== user?.id) {
+      return user.following.some((f: AuthorDTO) => f.id === profile?.id);
+    }
+    return false;
+  };
   const { addToast } = useToast();
 
   const id = useParams().id;
@@ -41,6 +48,7 @@ const ProfilePage = () => {
   const { mutate: unfollowUser } = useUnfollowUser();
   const { mutate: followUser } = useFollowUser();
   const { deleteUser } = useDeleteUser();
+  const [following, setFollowing] = useState<boolean>(checkFollowingStatus);
   if (!id) return null;
 
   const handleButtonType = (): { component: ButtonType; text: string } => {
@@ -88,6 +96,7 @@ const ProfilePage = () => {
         });
       } else {
         await followUser(id);
+        setFollowing(true);
       }
     }
   };

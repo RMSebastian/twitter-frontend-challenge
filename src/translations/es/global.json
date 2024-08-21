@@ -27,6 +27,9 @@
     "cancel": "Cancelar",
     "logout": "Cerrar sesión"
   },
+  "chat":{
+    "friends-title": "Amigos"
+  },
   "placeholder": {
     "new-chat": "Comenzar un nuevo chat",
     "search": "Buscar en twitter",
