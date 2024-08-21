@@ -40,7 +40,7 @@ const ContentFeed = () => {
   return (
     <>
       {activeFirstPage ? (
-        <div style={{ overflowY: "scroll" }}>
+        <div style={{ overflowY: "auto" }}>
           {getAllPostData?.pages.map((d, index) => {
             return (
               <Feed
@@ -53,7 +53,7 @@ const ContentFeed = () => {
           <div ref={ref}>{isFetchingGetAllNextPage ? <Loader /> : <></>}</div>
         </div>
       ) : (
-        <div style={{ overflowY: "scroll" }}>
+        <div style={{ overflowY: "auto" }}>
           {getFollowPostData?.pages.map((d, index) => {
             return (
               <Feed
