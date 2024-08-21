@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 import { ButtonType } from "../../button/StyledButton";
 import { StyledDeletePostModalContainer } from "./DeletePostModalContainer";
 import { useDeletePostById } from "../../../hooks/htttpServicesHooks/post.hooks";
-import { useDeleteCommentById } from "../../../hooks/htttpServicesHooks/comment.hooks";
+import { updateCommentInfiniteQueryNumber, useDeleteCommentById } from "../../../hooks/htttpServicesHooks/comment.hooks";
+import { updateInfiniteQueryPost, updateQueryPost } from "../../../service/ReactQueryUpdateCache";
 
 interface DeletePostModalProps {
   show: boolean;
@@ -30,8 +31,29 @@ export const DeletePostModal = ({
   const handleDelete =async () => {
     try {
       if (parentId !== undefined && parentId !== null) {
+        updateCommentInfiniteQueryNumber(["getAllPosts"], parentId, false);
+        updateCommentInfiniteQueryNumber(
+          ["getFollowPosts"],
+          parentId!,
+          false
+        );
+        updateInfiniteQueryPost(
+          ["getCommentsByPostId", parentId!],
+          false,
+          id,
+          undefined
+        );
+        updateQueryPost(["getCommentById", parentId], false);
+  
+        updateQueryPost(["getPostById", parentId], false);
         await deleteComment({ id, parentId });
       } else {
+        updateInfiniteQueryPost(
+          ["getAllPosts"],
+          false,
+          id,
+          undefined
+        );
         await deletePost(id);
       }
       handleClose();

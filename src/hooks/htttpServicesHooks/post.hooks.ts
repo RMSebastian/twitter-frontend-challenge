@@ -19,6 +19,7 @@ import { useToast } from "../../components/toast/ToastProvider";
 import { ToastType } from "../../components/toast/Toast";
 import { CursorPagination } from "../../util/Pagination";
 import { LIMIT } from "../../util/Constants";
+import { updateInfiniteQueryPost } from "../../service/ReactQueryUpdateCache";
 
 //Use Query
 export const useGetPosts = () => {
@@ -143,17 +144,11 @@ export const usePostPost = () => {
     },
     onSuccess: async (data) => {
 
-      queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
+      updateInfiniteQueryPost(
         ["getAllPosts"],
-        (postPages) => {
-          if (postPages) {
-            return {
-              ...postPages,
-              pages: [[data], ...postPages.pages],
-            };
-          }
-          return postPages;
-        }
+        true,
+        undefined,
+        data,
       );
       addToast({
         message: "Post created successfully ",
@@ -174,21 +169,6 @@ export const useDeletePostById = () => {
       return await deleteData(deletePostById_param_endpoint(postId))
     },
     onSuccess: (data, postId) => {
-      queryClient.setQueryData<{ pages: PostDTO[][]; pageParams: unknown[] }>(
-        ["getAllPosts"],
-        (postPages) => {
-          console.log(postPages);
-          if (postPages) {
-            return {
-              ...postPages,
-              pages: postPages.pages.map((page) =>
-                page.filter((post) => post.id !== postId)
-              ),
-            };
-          }
-          return postPages;
-        }
-      );
       addToast({
         message: "Post deleted successfully",
         type: ToastType.SUCCESS,
